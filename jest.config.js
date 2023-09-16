@@ -1,7 +1,8 @@
 module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
-	verbose: true, // con esta opción vemos los resultados individual de los test
+	// With verbose option we can see the individual test results
+	verbose: true,
 	collectCoverage: true,
 	coverageDirectory: './coverage',
 	coverageThreshold: {
