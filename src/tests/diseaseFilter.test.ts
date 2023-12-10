@@ -1,113 +1,49 @@
 import { DiseaseFilter } from '../core/diseaseFilter';
 
 describe('Disease filter', () => {
-	let cases = [];
-	let diagnoses = [];
-	let diseaseFilter: DiseaseFilter;
-	beforeEach(() => {
-		cases = [
-			{
-				id: 1,
-				patientName: 'Chupito',
-				diagnosisId: 1,
-				diagnosisName: 'Calicivirus',
-				publicNotes: [{ id: 1, content: 'public' }],
-				privateNotes: [{ id: 2, content: 'private' }],
-			},
-			{
-				id: 2,
-				patientName: 'Juliana',
-				diagnosisId: 2,
-				diagnosisName: 'Epilepsia',
-				publicNotes: [{ id: 1, content: 'public' }],
-				privateNotes: [],
-			},
-			{
-				id: 3,
-				patientName: 'Dinwell',
-				diagnosisId: 3,
-				diagnosisName: 'Otitis',
-				publicNotes: [{ id: 1, content: 'public' }],
-				privateNotes: [],
-			},
-		];
-		diagnoses = [
-			{
-				id: 1,
-				name: 'Calicivirus',
-				location: 'Vías respiratorias altas',
-				system: 'Respiratorio',
-				origin: 'Virus',
-				specie: 'Gato',
-			},
-			{
-				id: 2,
-				name: 'Epilepsia',
-				location: 'Cerebro',
-				system: 'Neurológico',
-				origin: 'Idiopático',
-				specie: 'Perro, Gato',
-			},
-			{
-				id: 3,
-				name: 'Otitis',
-				location: 'Oídos',
-				system: 'Auditivo',
-				origin: 'Bacteria',
-				specie: 'Perro, Gato',
-			},
-			{
-				id: 4,
-				name: 'Bletaritis',
-				location: 'Cabeza y cuello, Ojos',
-				system: 'Sistema Tegumentario, Oftalmológico, Órganos de los sentidos',
-				origin: 'Inflamatorio',
-				specie: 'Perro, Gato',
-			},
-			{
-				id: 5,
-				name: 'Moquillo Felino (Panleucopenia)',
-				location: 'Abdomen',
-				system: 'Digestivo, Sistema Inmune',
-				origin: 'Infeccioso',
-				specie: 'Gato',
-			},
-			{
-				id: 6,
-				name: 'Cardiomiopatía',
-				location: 'Tórax',
-				system: 'Cardiovascular',
-				origin: 'Degenerativo, Hereditario',
-				specie: 'Perro, Gato',
-			},
-			{
-				id: 7,
-				name: 'Accidente Cerebrovascular',
-				location: 'Cabeza y cuello',
-				system: 'Sistema nervioso, cardiovascular',
-				origin: 'Degenerativo, Metabólico, Inflamatorio',
-				specie: 'Perro, Gato',
-			},
-			{
-				id: 8,
-				name: 'Moquillo Canino',
-				location: 'Tórax, Abdomen, Sistema Tegumentario, Cabeza y cuello, Ojos',
-				system: 'Respiratorio, Digestivo, Tegumentario, Nervioso, Oftalmológico, Órganos de los sentidos',
-				origin: 'Infeccioso',
-				specie: 'Perro',
-			},
-		];
-		diseaseFilter = DiseaseFilter.create(cases, diagnoses);
-	});
-
 	it('filters cases when several diagnosis filters are applied together', () => {
+		const cases = [createCase(1, 'Chupito'), createCase(2, 'Juliana'), createCase(3, 'Dinwell')];
+
+		const searchCriteria1 = 'Vías respiratorias altas';
+		const searchCriteria2 = 'Cerebro';
+		const diagnoses = [
+			createDiagnosis(1, searchCriteria1),
+			createDiagnosis(2, searchCriteria2),
+			createDiagnosis(3, 'Irrelevant location'),
+		];
+		const diseaseFilter = DiseaseFilter.create(cases, diagnoses);
+
 		diseaseFilter.addFilter('Cerebro');
 		diseaseFilter.addFilter('Vías respiratorias altas');
 
 		const result = diseaseFilter.casesFilteredByLocation;
 
 		expect(result.length).toBe(2);
-		expect(result[0].patientName).toBe('Juliana');
-		expect(result[1].patientName).toBe('Chupito');
+		const expectedName1 = 'Juliana';
+		const expectedName2 = 'Chupito';
+
+		expect(result[0].patientName).toBe(expectedName1);
+		expect(result[1].patientName).toBe(expectedName2);
 	});
 });
+
+function createCase(diagnosisId: number, patientName: string) {
+	return {
+		id: 0,
+		patientName: patientName,
+		diagnosisId: diagnosisId,
+		diagnosisName: 'Irrelevant diagnosis name',
+		publicNotes: [],
+		privateNotes: [],
+	};
+}
+function createDiagnosis(id: number, location: string) {
+	return {
+		id: id,
+		name: 'irrelevant name',
+		location: location,
+		system: 'irrelevant system',
+		origin: 'irrelevant origin',
+		specie: 'irrelevant specie',
+	};
+}
