@@ -10,16 +10,22 @@
  * - For all other numbers, the result should be the number itself.
  */
 export const fizzbuzz = (num: number): string => {
+	const enum POSSIBLE_RESULTS {
+		FIZZ = 'fizz',
+		BUZZ = 'buzz',
+		FIZZ_BUZZ = 'fizzbuzz',
+	}
+
 	const isDivisibleBy = (divisor: number) => num % divisor === 0;
 
 	if (isDivisibleBy(15)) {
-		return 'fizzbuzz';
+		return POSSIBLE_RESULTS.FIZZ_BUZZ;
 	}
 	if (isDivisibleBy(3)) {
-		return 'fizz';
+		return POSSIBLE_RESULTS.FIZZ;
 	}
 	if (isDivisibleBy(5)) {
-		return 'buzz';
+		return POSSIBLE_RESULTS.BUZZ;
 	}
 
 	return num.toString();
