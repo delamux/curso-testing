@@ -40,6 +40,15 @@ describe('The Video Controller', () => {
 
 		expect(spyRecorder).toHaveBeenCalled();
 	});
+
+	it('Check the sensor status once per second', () => {
+		const spySensor = jest.spyOn(sensor, 'isDetectingMotion');
+		const numberOfSeconds = 3;
+
+		controller.recordMotion(numberOfSeconds);
+
+		expect(spySensor).toHaveBeenCalledTimes(numberOfSeconds);
+	});
 });
 
 export class FakeSensor implements MotionSensor {
