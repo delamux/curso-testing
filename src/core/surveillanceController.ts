@@ -12,6 +12,10 @@ export class SurveillanceController {
 	constructor(private sensor: MotionSensor, private recorder: VideoRecorder) {}
 
 	public recordMotion() {
-		this.sensor.isDetectingMotion() ? this.recorder.startRecording() : this.recorder.stopRecording();
+		try {
+			this.sensor.isDetectingMotion() ? this.recorder.startRecording() : this.recorder.stopRecording();
+		} catch (error) {
+			this.recorder.stopRecording();
+		}
 	}
 }
