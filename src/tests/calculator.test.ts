@@ -1,6 +1,9 @@
 import * as arithmetic from '../core/arithmetic';
 import * as calculator from '../core/calculator';
 
+// using jst mock in this case mocking the modules can not work the result, is undefined
+// jest.mock('../core/arithmetic');
+
 // adding the method to check the result
 describe('The calculator', () => {
 	(arithmetic as arithmetic.Arithmetic).add = jest.fn(arithmetic.add);
