@@ -71,7 +71,7 @@ export class FakeSensor implements MotionSensor {
 }
 
 export class FakeRecorder implements VideoRecorder {
-	public isRecording = false;
+	private isRecording = false;
 	startRecording(): void {
 		this.isRecording = true;
 		console.log('start recording ...');
@@ -79,5 +79,8 @@ export class FakeRecorder implements VideoRecorder {
 	stopRecording(): void {
 		this.isRecording = false;
 		console.log('stop recording ...');
+	}
+	isCurrentlyRecording(): boolean {
+		return this.isRecording;
 	}
 }
