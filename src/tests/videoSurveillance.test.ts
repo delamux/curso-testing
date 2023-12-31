@@ -49,6 +49,19 @@ describe('The Video Controller', () => {
 
 		expect(spySensor).toHaveBeenCalledTimes(numberOfSeconds);
 	});
+
+	it('The startRecording should be called just one time when is recording', () => {
+		const stubSensor = jest.spyOn(sensor, 'isDetectingMotion');
+		stubSensor.mockImplementation(() => true);
+		const numberOfSeconds = 3;
+
+		const spyRecorder = jest.spyOn(recorder, 'startRecording');
+		controller.recordMotion();
+
+		controller.recordMotion(numberOfSeconds);
+
+		expect(spyRecorder).toHaveBeenCalledTimes(1);
+	});
 });
 
 export class FakeSensor implements MotionSensor {
@@ -58,10 +71,13 @@ export class FakeSensor implements MotionSensor {
 }
 
 export class FakeRecorder implements VideoRecorder {
+	public isRecording = false;
 	startRecording(): void {
+		this.isRecording = true;
 		console.log('start recording ...');
 	}
 	stopRecording(): void {
+		this.isRecording = false;
 		console.log('stop recording ...');
 	}
 }

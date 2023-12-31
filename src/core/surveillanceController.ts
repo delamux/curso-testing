@@ -3,6 +3,8 @@ export interface MotionSensor {
 }
 
 export interface VideoRecorder {
+	isRecording: boolean;
+
 	startRecording(): void;
 
 	stopRecording(): void;
@@ -11,7 +13,7 @@ export interface VideoRecorder {
 export class SurveillanceController {
 	constructor(private sensor: MotionSensor, private recorder: VideoRecorder) {}
 
-	public async recordMotion(seconds = 1) {
+	public recordMotion(seconds = 1) {
 		this.range(seconds).forEach(() => {
 			this.tryToRecord();
 			this.waitOneSecond();
@@ -29,7 +31,9 @@ export class SurveillanceController {
 
 	private tryToRecord() {
 		try {
-			this.sensor.isDetectingMotion() ? this.recorder.startRecording() : this.recorder.stopRecording();
+			if (!this.recorder.isRecording) {
+				this.sensor.isDetectingMotion() ? this.recorder.startRecording() : this.recorder.stopRecording();
+			}
 		} catch (error) {
 			this.recorder.stopRecording();
 		}
