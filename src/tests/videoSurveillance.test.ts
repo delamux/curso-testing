@@ -50,7 +50,7 @@ describe('The Video Controller', () => {
 		expect(spySensor).toHaveBeenCalledTimes(numberOfSeconds);
 	});
 
-	it('The startRecording should be called just one time when is recording', () => {
+	it('The startRecording should be called just one time in 3 seconds when is recording', () => {
 		const stubSensor = jest.spyOn(sensor, 'isDetectingMotion');
 		stubSensor.mockImplementation(() => true);
 		const numberOfSeconds = 3;
