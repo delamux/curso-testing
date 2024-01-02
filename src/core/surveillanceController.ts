@@ -6,8 +6,6 @@ export interface VideoRecorder {
 	startRecording(): void;
 
 	stopRecording(): void;
-
-	isCurrentlyRecording(): boolean;
 }
 
 export class SurveillanceController {
@@ -31,9 +29,7 @@ export class SurveillanceController {
 
 	private tryToRecord() {
 		try {
-			if (!this.recorder.isCurrentlyRecording()) {
-				this.sensor.isDetectingMotion() ? this.recorder.startRecording() : this.recorder.stopRecording();
-			}
+			this.sensor.isDetectingMotion() ? this.recorder.startRecording() : this.recorder.stopRecording();
 		} catch (error) {
 			this.recorder.stopRecording();
 		}
