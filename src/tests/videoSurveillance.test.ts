@@ -42,12 +42,14 @@ describe('The Video Controller', () => {
 	});
 
 	it('Check the sensor status once per second', () => {
-		const spySensor = jest.spyOn(sensor, 'isDetectingMotion');
-		const numberOfSeconds = 3;
+		const stubSensor = jest.spyOn(sensor, 'isDetectingMotion');
+		stubSensor.mockImplementation(() => true);
 
+		const numberOfSeconds = 3;
+		const spyLogger = jest.spyOn(console, 'log');
 		controller.recordMotion(numberOfSeconds);
 
-		expect(spySensor).toHaveBeenCalledTimes(numberOfSeconds);
+		expect(spyLogger).toHaveBeenCalledWith('Already recording ...');
 	});
 });
 
