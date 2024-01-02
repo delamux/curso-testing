@@ -49,7 +49,10 @@ describe('The Video Controller', () => {
 		const spyLogger = jest.spyOn(console, 'log');
 		controller.recordMotion(numberOfSeconds);
 
-		expect(spyLogger).toHaveBeenCalledWith('Already recording ...');
+		expect(spyLogger).toHaveBeenCalledTimes(3);
+		expect(spyLogger).toHaveBeenNthCalledWith(1, 'start recording ...');
+		expect(spyLogger).toHaveBeenNthCalledWith(2, 'Already recording ...');
+		expect(spyLogger).toHaveBeenNthCalledWith(3, 'Already recording ...');
 	});
 });
 
