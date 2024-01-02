@@ -65,8 +65,9 @@ export class FakeRecorder implements VideoRecorder {
 		if (!this.isRecording) {
 			this.isRecording = true;
 			console.log('start recording ...');
+		} else {
+			console.log('Already recording ...');
 		}
-		console.log('Already recording ...');
 	}
 	stopRecording(): void {
 		this.isRecording = false;
