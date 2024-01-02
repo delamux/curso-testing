@@ -56,11 +56,9 @@ describe('The Video Controller', () => {
 		const numberOfSeconds = 3;
 
 		const spyRecorder = jest.spyOn(recorder, 'startRecording');
-		controller.recordMotion();
-
 		controller.recordMotion(numberOfSeconds);
 
-		expect(spyRecorder).toHaveBeenCalledTimes(1);
+		expect(spyRecorder).toHaveBeenCalledTimes(3);
 	});
 });
 
@@ -71,16 +69,48 @@ export class FakeSensor implements MotionSensor {
 }
 
 export class FakeRecorder implements VideoRecorder {
-	private isRecording = false;
+	private state: VideoRecorder;
+
+	constructor() {
+		this.state = new IdleState(this);
+	}
+
+	setState(state: VideoRecorder): void {
+		this.state = state;
+	}
+
 	startRecording(): void {
-		this.isRecording = true;
 		console.log('start recording ...');
+		this.state.startRecording();
 	}
 	stopRecording(): void {
-		this.isRecording = false;
 		console.log('stop recording ...');
+		this.state.stopRecording();
 	}
-	isCurrentlyRecording(): boolean {
-		return this.isRecording;
+}
+
+class IdleState implements VideoRecorder {
+	constructor(private recorder: FakeRecorder) {}
+
+	startRecording(): void {
+		console.log('Recording started.');
+		this.recorder.setState(new RecordingState(this.recorder));
+	}
+
+	stopRecording(): void {
+		console.log('Cannot stop. Not recording.');
+	}
+}
+
+class RecordingState implements VideoRecorder {
+	constructor(private recorder: FakeRecorder) {}
+
+	startRecording(): void {
+		console.log('Already recording.');
+	}
+
+	stopRecording(): void {
+		console.log('Recording stopped.');
+		this.recorder.setState(new IdleState(this.recorder));
 	}
 }
